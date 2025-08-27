@@ -1,6 +1,7 @@
 ## Beejan Technologies Conceptual Data Pipeline
 
 The following outlines my solution to the problem scenario, including my assumptions and the design process I followed.
+The pipeline.png file contains my conceptual pipeline diagram chart.
 
 ---
 
