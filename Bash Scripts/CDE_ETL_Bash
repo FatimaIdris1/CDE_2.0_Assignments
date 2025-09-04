@@ -1,0 +1,69 @@
+#!/bin/bash
+
+#DATA EXTRACTION
+
+# Environment variable for the download URL
+export ANNUAL_ENTERPRISE_LINK="https://www.stats.govt.nz/assets/Uploads/Annual-enterprise-survey/Annual-enterprise-survey-2023-financial-year-provisional/Download-data/annual-enterprise-survey-2023-financial-year-provisional.csv"
+
+# Download file into current folder (raw)
+curl -o "annual-enterprise.csv" "$ANNUAL_ENTERPRISE_LINK"
+
+# Creating and saving the raw file in "raw" folder
+mkdir -p raw
+mv "annual-enterprise.csv" raw/
+
+# Confirm the file is in raw folder
+FILE="annual-enterprise.csv"
+if [ -f "raw/$FILE" ]; then
+    echo "$FILE found in raw folder"
+else
+    echo "$FILE NOT found in raw folder"
+fi
+#---
+
+#DATA TRANSFORMATION
+
+# Variable_code (renamed to variable_code)
+sed '1s/Variable_code/variable_code/' raw/annual-enterprise.csv > raw/annual-enterprise.csv
+
+# Extract only Year, Value, Units, and variable_code
+cut -d',' -f1,9,5,6 raw/annual-enterprise.csv > 2023_year_finance.csv
+
+output=2023_year_finance.csv
+
+# Confirm output
+if [[ -f "$output" ]]; then
+  echo "$output created successfully"
+else
+  echo "Failed to create $output"
+fi
+
+# Moving the transformed file into "Transformed" folder
+
+mkdir -p Transformed
+
+cp $output Transformed/
+
+# Confirming if it was successful
+if [[ -f "Transformed/$output" ]]; then
+  echo "$output in Transformed"
+else
+  echo "Failed to put $output in Transformed"
+fi
+#---
+
+
+# DATA LOADING
+
+# Creating Gold folder if it doesn't exist
+mkdir -p Gold
+
+# Move transformed file into Gold
+cp "Transformed/$output" Gold/
+
+# Confirm the file is in Gold folder
+if [ -f "Gold/$output" ]; then
+    echo "$output moved to Gold folder"
+else
+    echo "$output NOT found in Gold folder"
+fi

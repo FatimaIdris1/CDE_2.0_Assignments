@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Source files from the folder argument if provided
+# otherwise default to the current directory
+SOURCE_FOLDER="${1:-.}"
+
+# Check if source folder exists
+if [[ ! -d "$SOURCE_FOLDER" ]]; then
+    echo "Error: Source folder '$SOURCE_FOLDER' does not exist!"
+    exit 1
+fi
+
+# Create destination folder if it doesn't exist
+mkdir -p "json_and_CSV"
+
+DESTINATION=json_and_CSV
+# Move CSV and JSON files
+mv "$SOURCE_FOLDER"/*.csv "$DESTINATION"/ 2>/dev/null
+mv "$SOURCE_FOLDER"/*.json "$DESTINATION"/ 2>/dev/null
+
+echo "Files moved to destination folder:: $DESTINATION"
